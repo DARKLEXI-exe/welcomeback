@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Avnii — Welcome Back 🦬💛</title>
+  <meta name="description" content="A cinematic, interactive welcome back memory journal for my best friend Avnii.">
+  <meta name="theme-color" content="#1C130D">
+
+  <!-- Google Fonts with font-display: swap -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Film Grain Overlay -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- Background Particle & Tear Effect Canvas -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- Flash Overlay Effect -->
+  <div id="flash-overlay" class="flash-overlay" aria-hidden="true"></div>
+
+  <!-- Sunrise Ambient Lighting Container -->
+  <div id="sunrise-glow" class="sunrise-glow" aria-hidden="true"></div>
+
+  <!-- Cursor Glow Overlay (Desktop) -->
+  <div id="cursor-glow" class="cursor-glow" aria-hidden="true"></div>
+
+  <!-- FLOATING MUSIC CONTROLLER -->
+  <div id="music-controller" class="music-controller hidden">
+    <div class="music-btn-wrapper">
+      <button id="btn-music" class="music-btn" aria-label="Toggle background music">
+        <span class="music-icon">♪</span>
+        <span class="equalizer hidden">
+          <span class="bar bar1"></span>
+          <span class="bar bar2"></span>
+          <span class="bar bar3"></span>
+        </span>
+      </button>
+      <div id="main-music-toast" class="music-toast handwritten hidden">
+        playing something for you ♡
+      </div>
+    </div>
+    <audio id="audio-bg" loop preload="metadata">
+      <source src="assets/music/song.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <!-- AUDIO FOR VOICE RECORDING -->
+  <audio id="audio-voice" preload="metadata">
+    <source src="assets/voice/avni-voice.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ========================================== -->
+  <!-- 1. OPENING EXPERIENCE (CINEMATIC HERO)     -->
+  <!-- ========================================== -->
+  <section id="opening-screen" class="opening-screen">
+    
+    <!-- Fullscreen 100vw x 100vh Background Photo Foundation -->
+    <div class="hero-bg-layer" id="hero-bg-layer">
+      <img src="assets/photos/avnii-hero.jpg" alt="Avnii Hero Photograph" class="hero-bg-img" id="hero-bg-img" fetchpriority="high" decoding="async" loading="eager" width="1200" height="1500">
+      <div class="hero-bg-fallback hidden">
+        <span class="fallback-icon">📷</span>
+        <span class="fallback-text">Avnii</span>
+      </div>
+      <!-- Radial, Linear, Edge Blending & Color Grading Overlays -->
+      <div class="hero-blend-vignette"></div>
+      <div class="hero-blend-lighting" id="hero-blend-lighting"></div>
+      <div class="hero-edge-fade"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="opening-nav">
+      <div class="nav-logo handwritten">for my person 💛</div>
+      <nav class="nav-links">
+        <a href="#sec-hero" class="nav-link">Our Story</a>
+        <a href="#sec-photos" class="nav-link">Memories</a>
+        <a href="#sec-cried" class="nav-link">Little Secrets</a>
+        <a href="#sec-buffalo" class="nav-link">To My Buffalo</a>
+        <a href="#sec-final-sequence" class="nav-link">Welcome Back</a>
+      </nav>
+      
+      <!-- Top Right Opening Music Toggle Button -->
+      <div class="opening-music-wrapper">
+        <button id="btn-opening-music" class="music-btn opening-music-btn" aria-label="Toggle background music">
+          <span class="music-icon">♪</span>
+          <span class="equalizer hidden">
+            <span class="bar bar1"></span>
+            <span class="bar bar2"></span>
+            <span class="bar bar3"></span>
+          </span>
+        </button>
+        <div id="hero-music-toast" class="music-toast handwritten hidden">
+          playing something for you ♡
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Glassmorphism Hero Container -->
+    <div class="hero-glass-container" id="hero-glass-container">
+      
+      <!-- Hidden Heart Discovery Element -->
+      <button id="hidden-heart-trigger" class="hidden-heart-trigger" aria-label="Hidden heart secret" title="A tiny secret...">💛</button>
+
+      <!-- Left Column: Emotional Content -->
+      <div class="hero-glass-left">
+        <p class="handwritten hero-pretitle">I made something for you.</p>
+        <p class="handwritten hero-sub-pretitle">don't laugh okay...</p>
+        
+        <h1 class="hero-main-title">AVNII</h1>
+        <p class="hero-subtitle">before you come back tomorrow...</p>
+
+        <!-- Main Open Button Wrapper -->
+        <div class="hero-btn-wrapper">
+          <button id="btn-open-experience" class="btn-primary hero-open-btn" aria-label="Open the Welcome Back experience">
+            open it ♡
+          </button>
+          
+          <!-- "stay for a second ↓" Interactive Line -->
+          <div id="btn-stay-second" class="stay-second-link handwritten" role="button" tabindex="0">
+            stay for a second ↓
+          </div>
+
+          <!-- Secret Revelation Container for "stay for a second" -->
+          <div id="stay-reveal-box" class="stay-reveal-box hidden">
+            <p class="handwritten stay-line1">I missed you, you know.</p>
+            <p class="handwritten stay-line2 text-gold">more than I probably said.</p>
+          </div>
+        </div>
+
+        <!-- Handwritten Speech Bubble (Bottom Left) -->
+        <div class="hero-speech-bubble handwritten">
+          psst...<br>you might wanna<br>turn on the music ♡
+        </div>
+      </div>
+
+      <!-- Right Column: Prominent Photo Focus & Handwritten Annotations -->
+      <div class="hero-glass-right">
+        <div class="hero-photo-wrapper">
+          <img src="assets/photos/avnii-hero.jpg" alt="Avnii" class="hero-photo-img" id="hero-photo-img" decoding="async" loading="eager" width="420" height="525">
+          <div class="hero-photo-blend-overlay"></div>
+          
+          <!-- Interactive Handwritten Annotations / Notes around Photo -->
+          <span class="hero-annotation note-person handwritten interactive-tag" data-tag="person">my person ♡</span>
+          <span class="hero-annotation note-dumbo handwritten interactive-tag" data-tag="dumbo">dumbo</span>
+          <span class="hero-annotation note-sinchuu handwritten interactive-tag" data-tag="sinchuu">sinchuu</span>
+          <span class="hero-annotation note-hemuu handwritten interactive-tag" data-tag="hemuu">hemuu</span>
+          <span class="hero-annotation note-buffalo handwritten interactive-tag" data-tag="buffalo">buffalo 🦬</span>
+
+          <!-- Decorative Doodles -->
+          <div class="doodle doodle-flower">🌸</div>
+          <div class="doodle doodle-sparkle-1">✦</div>
+          <div class="doodle doodle-sparkle-2">✨</div>
+        </div>
+
+        <!-- Sticky Note Element (Lower Right) -->
+        <div class="hero-sticky-note handwritten">
+          "you're my<br>dumbo<br>my buffalo<br>my everything"
+        </div>
+      </div>
+
+      <!-- Personal Signature (Exact Required Wording & Double 'e' in lovee) -->
+      <div class="hero-signature-box">
+        <span class="signature-line handwritten">made with lovee and soul</span>
+        <span class="signature-author handwritten">by Vighnesh Adiii</span>
+      </div>
+
+    </div>
+
+    <!-- Bottom Memory Timestamp Metadata -->
+    <div class="hero-bottom-bar">
+      <span class="memory-metadata">A LITTLE SOMETHING FOR AVNII • 2026 • 10:55 PM</span>
+    </div>
+
+  </section>
+
+  <!-- ========================================== -->
+  <!-- MAIN WEBSITE CONTAINER (REVEALED ON OPEN)  -->
+  <!-- ========================================== -->
+  <main id="main-website" class="main-website hidden">
+
+    <!-- 2. HERO — WELCOME BACK -->
+    <section id="sec-hero" class="sec-hero section-theme-cream">
+      <div class="container hero-container">
+        <span class="badge-tag handwritten">for my best friend</span>
+        <h1 class="hero-title">
+          WELCOME BACK,<br>
+          <span class="highlight-buffalo">MY BUFFALO. 🦬</span>
+        </h1>
+        
+        <p class="hero-p fade-in-line">You were gone for a little while...</p>
+        <p class="hero-p fade-in-line delay-1">...but somehow everything felt different.</p>
+
+        <div class="hero-action-wrapper">
+          <button id="btn-missed-hero" class="btn-secondary btn-magnetic">
+            I missed you →
+          </button>
+        </div>
+
+        <!-- Animated Stagger Text Container -->
+        <div id="hero-reveal-container" class="hero-reveal-container hidden">
+          <div class="stagger-line line-1">I MISSED YOU.</div>
+          <div class="stagger-line line-2">A LOT.</div>
+          <div class="stagger-line line-3">LIKE... A REALLY STUPID AMOUNT.</div>
+          <div class="stagger-line line-4">LIKE I MISSED YOUR VOICE.</div>
+          <div class="stagger-line line-5 highlight-person">LIKE I MISSED MY PERSON.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. INTERACTIVE DISTANCE JOURNEY -->
+    <section id="sec-journey" class="sec-journey section-theme-gold">
+      <div class="container">
+        <div class="section-header center">
+          <span class="handwritten text-accent">while you were away...</span>
+          <h2>The Haveri Story</h2>
+          <p class="section-desc">Tap each chapter to uncover what happened.</p>
+        </div>
+
+        <div class="journey-grid">
+          
+          <!-- Stage 01: Haveri -->
+          <div id="stage-haveri" class="journey-card interactive-card">
+            <div class="card-badge">STAGE 01</div>
+            <div class="card-icon">🏡</div>
+            <h3>Haveri</h3>
+            <p class="card-prompt">Tap to open chapter</p>
+            <div class="card-reveal-content hidden">
+              <p class="story-p">You went there for college holidays.</p>
+              <p class="story-p emphasis">And I started missing you instantly.</p>
+            </div>
+          </div>
+
+          <!-- Stage 02: Calls -->
+          <div id="stage-calls" class="journey-card interactive-card">
+            <div class="card-badge">STAGE 02</div>
+            <div class="card-icon phone-icon-anim">📱</div>
+            <h3>The Calls</h3>
+            <p class="card-prompt">Tap phone to connect call</p>
+            <div class="card-reveal-content hidden">
+              <p class="story-p">The calls became tiny little moments.</p>
+              <p class="story-p">Because your sister was there, it was hard.</p>
+              <p class="story-p emphasis">Sometimes hidingly.</p>
+              <div class="call-badge">
+                <span class="call-dot"></span> 📞 00:04:17
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage 03: Silence -->
+          <div id="stage-silence" class="journey-card interactive-card silence-card">
+            <div class="card-badge">STAGE 03</div>
+            <div class="card-icon">🌙</div>
+            <h3>And then...</h3>
+            <p class="card-prompt">Tap the quiet space</p>
+            <div class="silence-reveal-wrapper hidden">
+              <h2 class="silence-title">silence.</h2>
+              <div class="silence-lines">
+                <p class="s-line s1">I missed hearing you.</p>
+                <p class="s-line s2">I missed randomly talking to you.</p>
+                <p class="s-line s3">I missed annoying you.</p>
+                <p class="s-line s4 highlight-bold">I missed you.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. VOICE SECTION -->
+    <section id="sec-voice" class="sec-voice section-theme-dark">
+      <div class="container center">
+        <span class="handwritten text-gold">the hardest part</span>
+        <h2 class="voice-question">Do you know what I missed the most?</h2>
+        
+        <div id="btn-voice-trigger" class="voice-mic-btn interactive-card" role="button" tabindex="0" aria-label="Listen to voice memory">
+          <div class="mic-ring"></div>
+          <div class="mic-icon">🎙️</div>
+          <span class="mic-label">Tap to unlock voice memory</span>
+        </div>
+
+        <div id="voice-player-container" class="voice-player-container hidden">
+          <h1 class="voice-title-reveal">your voice.</h1>
+          
+          <!-- Animated Waveform Visualizer -->
+          <div class="waveform-box">
+            <div class="wave-bar wb1"></div>
+            <div class="wave-bar wb2"></div>
+            <div class="wave-bar wb3"></div>
+            <div class="wave-bar wb4"></div>
+            <div class="wave-bar wb5"></div>
+            <div class="wave-bar wb6"></div>
+            <div class="wave-bar wb7"></div>
+            <div class="wave-bar wb8"></div>
+            <div class="wave-bar wb9"></div>
+            <div class="wave-bar wb10"></div>
+          </div>
+
+          <div class="voice-subtitles">
+            <p class="v-sub v1">Even your random nonsense.</p>
+            <p class="v-sub v2 emphasis-gold">I missed it so badly.</p>
+          </div>
+        </div>
+
+        <!-- Scattered Memory Secret #1 -->
+        <button class="secret-trigger-chip" data-secret="voice">
+          📞 something about your voice
+        </button>
+      </div>
+    </section>
+
+    <!-- 5. PHOTO MEMORY GALLERY (ACTUAL SCRAPBOOK) -->
+    <section id="sec-photos" class="sec-photos section-theme-cream">
+      <div class="container">
+        <div class="section-header center">
+          <span class="handwritten text-accent">our scrapbook memories</span>
+          <h2>Scattered Moments</h2>
+          <p class="section-desc">Tap any memory to view in full resolution.</p>
+        </div>
+
+        <!-- Organic Scattered Scrapbook Layout -->
+        <div class="scrapbook-scattered-grid">
+          
+          <!-- Photo 1 -->
+          <div class="scrapbook-item polaroid rot-left-1" data-photo-id="1">
+            <div class="tape tape-top-left"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.52.40 PM.jpeg" alt="Memory 1" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">📷</span>
+                <span class="fallback-text">Memory 1</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">one of my favourite idiots 💛</p>
+          </div>
+
+          <!-- Photo 2 -->
+          <div class="scrapbook-item polaroid rot-right-2" data-photo-id="2">
+            <div class="tape tape-top-right"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.52.40 PM (1).jpeg" alt="Memory 2" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">📷</span>
+                <span class="fallback-text">Memory 2</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">why are you like this 😭</p>
+          </div>
+
+          <!-- Photo 3: SPECIAL EMOTIONAL MEMORY PHOTO -->
+          <div class="scrapbook-item polaroid polaroid-special rot-left-2" data-photo-id="3">
+            <div class="tape tape-center"></div>
+            <div class="special-glow-ring"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.52.41 PM.jpeg" alt="Special Memory 3" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">✨</span>
+                <span class="fallback-text">Special Memory</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten highlight-caption">my dumbo (tap me 💛)</p>
+          </div>
+
+          <!-- Photo 4 -->
+          <div class="scrapbook-item polaroid rot-right-1" data-photo-id="4">
+            <div class="tape tape-top-left"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.52.41 PM (1).jpeg" alt="Memory 4" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">📷</span>
+                <span class="fallback-text">Memory 4</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">my buffalo 🦬</p>
+          </div>
+
+          <!-- Photo 5 -->
+          <div class="scrapbook-item polaroid rot-left-1" data-photo-id="5">
+            <div class="tape tape-top-right"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.52.41 PM (2).jpeg" alt="Memory 5" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">📷</span>
+                <span class="fallback-text">Memory 5</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">one of those memories I wish I could replay.</p>
+          </div>
+
+          <!-- Photo 6 -->
+          <div class="scrapbook-item polaroid rot-right-2" data-photo-id="6">
+            <div class="tape tape-center"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.52.41 PM (3).jpeg" alt="Memory 6" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">📷</span>
+                <span class="fallback-text">Memory 6</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">pure sinchuu energy ✨</p>
+          </div>
+
+          <!-- Photo 7 -->
+          <div class="scrapbook-item polaroid rot-left-2" data-photo-id="7">
+            <div class="tape tape-top-left"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.52.41 PM (4).jpeg" alt="Memory 7" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">📷</span>
+                <span class="fallback-text">Memory 7</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">hemuu being hemuu.</p>
+          </div>
+
+          <!-- Photo 8 -->
+          <div class="scrapbook-item polaroid rot-right-1" data-photo-id="8">
+            <div class="tape tape-top-right"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/WhatsApp Image 2026-08-15 at 10.53.09 PM.jpeg" alt="Memory 8" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">📷</span>
+                <span class="fallback-text">Memory 8</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">best friends forever 💛</p>
+          </div>
+
+          <!-- Photo 9: Bracelet Memory -->
+          <div class="scrapbook-item polaroid rot-left-1" data-photo-id="9">
+            <div class="tape tape-top-left"></div>
+            <div class="photo-frame">
+              <img src="assets/photos/bracelet.jpeg" alt="Memory 9" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+              <div class="photo-fallback hidden">
+                <span class="fallback-icon">✨</span>
+                <span class="fallback-text">Memory 9</span>
+              </div>
+            </div>
+            <p class="polaroid-caption handwritten">the little things that remind me of you ✨</p>
+          </div>
+
+        </div>
+
+        <!-- Scattered Memory Secret #2 -->
+        <div class="center space-top">
+          <button class="secret-trigger-chip" data-secret="remember">
+            ♡ remember this
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW EXP 3: 💛 THINGS I REMEMBER ABOUT YOU (INTERACTIVE MEMORY OBJECTS) -->
+    <section id="sec-remember-objects" class="sec-remember-objects section-theme-gold">
+      <div class="container center">
+        <span class="handwritten text-brown">little details</span>
+        <h2>Things I Remember About You</h2>
+        <p class="section-desc">Click or tap around to discover little memories.</p>
+
+        <!-- Floating Memory Objects Container -->
+        <div class="memory-objects-grid">
+          
+          <div class="memory-object-card" data-obj-id="1" role="button" tabindex="0">
+            <div class="memory-object-icon">📞</div>
+            <span class="memory-object-label handwritten">voice</span>
+          </div>
+
+          <div class="memory-object-card" data-obj-id="2" role="button" tabindex="0">
+            <div class="memory-object-icon">🌼</div>
+            <span class="memory-object-label handwritten">flower</span>
+          </div>
+
+          <div class="memory-object-card" data-obj-id="3" role="button" tabindex="0">
+            <div class="memory-object-icon">🦬</div>
+            <span class="memory-object-label handwritten">buffalo</span>
+          </div>
+
+          <div class="memory-object-card" data-obj-id="4" role="button" tabindex="0">
+            <div class="memory-object-icon">🎀</div>
+            <span class="memory-object-label handwritten">habits</span>
+          </div>
+
+          <div class="memory-object-card" data-obj-id="5" role="button" tabindex="0">
+            <div class="memory-object-icon">📸</div>
+            <span class="memory-object-label handwritten">photos</span>
+          </div>
+
+          <div class="memory-object-card" data-obj-id="6" role="button" tabindex="0">
+            <div class="memory-object-icon">💛</div>
+            <span class="memory-object-label handwritten">person</span>
+          </div>
+
+          <div class="memory-object-card" data-obj-id="7" role="button" tabindex="0">
+            <div class="memory-object-icon">🎧</div>
+            <span class="memory-object-label handwritten">music</span>
+          </div>
+
+          <div class="memory-object-card" data-obj-id="8" role="button" tabindex="0">
+            <div class="memory-object-icon">🧵</div>
+            <span class="memory-object-label handwritten">bracelet</span>
+          </div>
+
+        </div>
+
+        <!-- Object Reveal Display Container -->
+        <div id="memory-object-reveal" class="memory-object-reveal glass-card hidden">
+          <h3 id="obj-reveal-title" class="obj-reveal-title"></h3>
+          <p id="obj-reveal-body" class="obj-reveal-body handwritten"></p>
+          <div id="obj-reveal-action" class="obj-reveal-action hidden"></div>
+        </div>
+
+        <!-- Memory Completion Banner (Revealed after all 8 objects clicked) -->
+        <div id="memory-completion-box" class="memory-completion-box hidden">
+          <h2 class="completion-title">you found all of them.</h2>
+          <p class="handwritten completion-sub">well... almost all.</p>
+          <button id="btn-hidden-memory-heart" class="btn-hidden-heart pulse-slow" aria-label="Discover final secret memory" title="Discover last secret">💛</button>
+
+          <div id="hidden-memory-reveal" class="hidden-memory-reveal hidden">
+            <p class="handwritten text-gold">I still remember one thing.</p>
+            <h1 class="handwritten text-gold-bright">how much I missed you. 💛</h1>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HANDMADE BRACELET MEMORY SECTION -->
+    <section id="sec-bracelet" class="sec-bracelet section-theme-cream">
+      <div class="container center">
+        <span class="handwritten text-accent">made with my own hands</span>
+        <h2>The Bracelet Memory</h2>
+        <div class="bracelet-card polaroid rot-left-1 max-width-card">
+          <div class="tape tape-center"></div>
+          <div class="photo-frame">
+            <img src="assets/photos/bracelet.jpeg" alt="Handmade Bracelet" class="photo-img" loading="lazy" decoding="async" width="400" height="300">
+          </div>
+          <p class="polaroid-caption handwritten">the little things that remind me of you ✨</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW EXP 1: 📖 THINGS I WANTED TO TELL YOU (INTERACTIVE NOTEBOOK) -->
+    <section id="sec-notebook" class="sec-notebook section-theme-peach">
+      <div class="container center">
+        <span class="handwritten text-brown">written in quiet moments</span>
+        <h2>Things I Wanted To Tell You</h2>
+        
+        <!-- Closed Notebook Cover View -->
+        <div id="notebook-closed" class="notebook-closed-cover glass-card">
+          <div class="notebook-icon">📖</div>
+          <p class="handwritten notebook-cover-note">there's something I wanted to tell you...</p>
+          <button id="btn-open-notebook" class="btn-primary space-top" aria-label="Open the handwritten notebook">
+            open the page ♡
+          </button>
+        </div>
+
+        <!-- Open Notebook Multi-Page Viewer -->
+        <div id="notebook-open-view" class="notebook-open-view hidden">
+          <div class="notebook-paper-container">
+            <div class="notebook-ring-binder"></div>
+            
+            <div id="notebook-page-content" class="notebook-page-content">
+              <!-- Page contents rendered dynamically via JS -->
+            </div>
+
+            <!-- Page Controls -->
+            <div class="notebook-nav-bar">
+              <button id="btn-nb-prev" class="btn-secondary btn-nb-nav" aria-label="Previous page" disabled>← prev</button>
+              <span id="nb-page-indicator" class="nb-page-indicator handwritten">Page 1 of 7</span>
+              <button id="btn-nb-next" class="btn-primary btn-nb-nav" aria-label="Next page">turn the page →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. THE "I CRIED" REVEAL SECTION -->
+    <section id="sec-cried" class="sec-cried section-theme-dark-cried">
+      <div class="container center">
+        <span class="handwritten text-muted-pink">a quiet confession</span>
+        
+        <button id="btn-cried-trigger" class="cried-trigger-btn btn-glass" aria-label="Unlock confession">
+          there's something I didn't tell you
+        </button>
+
+        <div id="cried-experience-container" class="cried-experience-container hidden">
+          <div class="cried-sequence">
+            <p class="cried-line c1">I actually cried sometimes.</p>
+            <p class="cried-line c2">Not because we were fighting.</p>
+            <p class="cried-line c3">Not because something was wrong.</p>
+            <p class="cried-line c4">I just missed you.</p>
+            <p class="cried-line c5">I missed your voice.</p>
+            <p class="cried-line c6">I missed having you around.</p>
+            <p class="cried-line c7">I missed my person.</p>
+            
+            <h1 class="cried-line c8 cried-climax">yeah... I cried. 🥹</h1>
+          </div>
+
+          <div class="tear-trigger-note hidden">
+            <span class="handwritten text-gold">you were never a burden. I just missed having you here.</span>
+          </div>
+        </div>
+
+        <!-- Scattered Memory Secret #3 -->
+        <div class="space-top">
+          <button class="secret-trigger-chip chip-dark" data-secret="dontclick">
+            🥹 don't click this
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. BUFFALO COMEDY BREAK -->
+    <section id="sec-buffalo" class="sec-buffalo section-theme-peach">
+      <div class="container center">
+        <span class="handwritten text-brown">changing the mood...</span>
+        <p class="buff-intro">Anyway.</p>
+        <h2 class="buff-title">you're still a buffalo.</h2>
+
+        <!-- Interactive Buffalo Canvas/Emoji -->
+        <div id="buffalo-box" class="buffalo-box interactive-card">
+          <div id="buffalo-emoji" class="buffalo-emoji">🦬</div>
+          <div class="buff-aura"></div>
+        </div>
+
+        <div class="buff-action-area">
+          <button id="btn-boop-buffalo" class="btn-primary btn-boop" aria-label="Boop the buffalo">
+            boop the buffalo 🦬
+          </button>
+
+          <div id="boop-msg-box" class="boop-msg-box">
+            <span id="boop-text" class="boop-text handwritten">Tap the button above to boop her!</span>
+          </div>
+          <div class="boop-counter">boops: <span id="boop-count">0</span></div>
+        </div>
+
+        <!-- Scattered Memory Secret #4 -->
+        <div class="space-top">
+          <button class="secret-trigger-chip" data-secret="buffalo">
+            🦬 classified buffalo information
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW EXP 2: 🦬 OFFICIAL BUFFALO FILE (CLASSIFIED DOCUMENT) -->
+    <section id="sec-buffalo-file" class="sec-buffalo-file section-theme-dark">
+      <div class="container center">
+        
+        <button id="btn-trigger-classified" class="secret-trigger-chip chip-dark">
+          🦬 classified
+        </button>
+
+        <div id="classified-doc-container" class="classified-doc-container glass-card hidden">
+          <div class="classified-stamp">CONFIDENTIAL</div>
+          <h1 class="classified-heading">OFFICIAL BUFFALO FILE</h1>
+          <p class="classified-sub handwritten">FOR VIGHNESH & AVNII EYES ONLY</p>
+          <hr class="classified-hr">
+
+          <div class="classified-grid">
+            <div class="c-field">
+              <span class="c-label">Name:</span>
+              <span class="c-val">Avnii</span>
+            </div>
+            <div class="c-field">
+              <span class="c-label">Known Aliases:</span>
+              <span class="c-val">Hemuu • Sinchuu • Dumbo • Buffalo 🦬</span>
+            </div>
+            <div class="c-field c-highlight">
+              <span class="c-label">Status:</span>
+              <span class="c-val status-idiot">MY FAVOURITE IDIOT</span>
+            </div>
+            <div class="c-field">
+              <span class="c-label">Threat Level:</span>
+              <span class="c-val text-gold">Extremely cute</span>
+            </div>
+          </div>
+
+          <div class="classified-crimes space-top">
+            <h3>Known Crimes:</h3>
+            <ul class="crimes-list">
+              <li>Stealing my peace</li>
+              <li>Stealing my attention</li>
+              <li>Being a buffalo</li>
+              <li>Making me miss her stupidly much</li>
+            </ul>
+          </div>
+
+          <div class="classified-punishment space-top">
+            <p class="p-line p1">Punishment: None.</p>
+            <p class="p-line p2 handwritten text-gold hidden">unfortunately, I forgive her.</p>
+          </div>
+
+          <!-- Classified Bars -->
+          <div class="classified-bars space-top">
+            <div class="c-bar-row">
+              <span>Buffalo activity level:</span>
+              <div class="c-bar-track"><div class="c-bar-fill w97">97%</div></div>
+            </div>
+            <div class="c-bar-row">
+              <span>Ability to annoy Vighnesh:</span>
+              <div class="c-bar-track"><div class="c-bar-fill w100">100%</div></div>
+            </div>
+            <div class="c-bar-row">
+              <span>Chance of being forgiven:</span>
+              <div class="c-bar-track"><div class="c-bar-fill w100">100%</div></div>
+            </div>
+            <div class="c-bar-row">
+              <span>Chance of stopping being a buffalo:</span>
+              <div class="c-bar-track"><div class="c-bar-fill w0">0%</div></div>
+            </div>
+          </div>
+
+          <h2 class="case-closed-title space-top">CASE CLOSED.</h2>
+
+          <!-- Interrogate Buffalo Interactive Button -->
+          <div class="interrogate-section space-top">
+            <button id="btn-interrogate-buffalo" class="btn-primary btn-boop" aria-label="Interrogate the buffalo suspect">
+              interrogate buffalo 🦬
+            </button>
+            <div id="interrogate-msg-box" class="interrogate-msg-box space-top">
+              <p id="interrogate-text" class="interrogate-text handwritten">Click above to interrogate the suspect!</p>
+            </div>
+          </div>
+
+          <!-- Final Buffalo File Conclusion -->
+          <div class="classified-conclusion space-top-lg">
+            <p class="conc-line c1">After extensive investigation...</p>
+            <h1 class="conc-line c2 text-gold-bright">I WOULDN'T TRADE THIS BUFFALO FOR ANYTHING.</h1>
+            <p class="conc-line c3 handwritten">unfortunately. 💛</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 8. SECRET DRAWER -->
+    <section id="sec-drawer" class="sec-drawer section-theme-cream">
+      <div class="container center">
+        <span class="handwritten text-accent">hidden away</span>
+        <h2>I kept something here.</h2>
+        
+        <div id="envelope-wrapper" class="envelope-wrapper">
+          <div id="envelope" class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <button id="btn-open-drawer" class="btn-secondary btn-drawer" aria-label="Open envelope">
+              open ✉️
+            </button>
+            <div id="letter-content" class="letter-content hidden">
+              <p class="handwritten letter-p1">If I could choose one thing from these holidays...</p>
+              <p class="handwritten letter-p2">I'd choose hearing your voice again.</p>
+              <p class="handwritten letter-p3 highlight-letter">Every single day.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. MISS YOU METER -->
+    <section id="sec-meter" class="sec-meter section-theme-gold">
+      <div class="container center">
+        <span class="handwritten text-brown">scientific calculations</span>
+        <h2>How Much Did I Miss You?</h2>
+        
+        <div class="meter-box glass-card">
+          <div class="meter-bar-track">
+            <div id="meter-progress" class="meter-progress"></div>
+          </div>
+          <div id="meter-percentage" class="meter-percentage">0%</div>
+
+          <button id="btn-calc-meter" class="btn-primary space-top" aria-label="Calculate miss-you percentage">
+            calculate 🧮
+          </button>
+
+          <div id="meter-result-container" class="meter-result-container hidden">
+            <h1 id="meter-error-text" class="meter-error-text glitch-text">ERROR</h1>
+            <h2 id="meter-too-much" class="meter-too-much">TOO MUCH TO MEASURE.</h2>
+            <p class="handwritten meter-comment">Yeah. That's about right. 💛</p>
+          </div>
+        </div>
+
+        <!-- Scattered Memory Secret #5 -->
+        <div class="space-top">
+          <button class="secret-trigger-chip" data-secret="star">
+            ✦ click me
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. FIGHTS & GROWTH SECTION -->
+    <section id="sec-fights" class="sec-fights section-theme-cream">
+      <div class="container center">
+        <span class="handwritten text-accent">real talk</span>
+        <h2 class="fights-heading">We had some really bad days too.</h2>
+        
+        <div class="fights-content glass-card max-width-card">
+          <p class="f-line">Almost every day felt heavy for a while.</p>
+          <p class="f-line">And somehow...</p>
+          <p class="f-line emphasis-brown">we kept understanding each other.</p>
+          <hr class="fights-divider">
+          <p class="f-line">This time there were no fights.</p>
+          <h2 class="f-climax">We just missed each other.</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. SHIRALI SECTION -->
+    <section id="sec-shirali" class="sec-shirali section-theme-peach">
+      <div class="container center">
+        <span class="handwritten text-brown">the SOP activity</span>
+        <h2>The Shirali Trip</h2>
+        
+        <div class="road-animation-wrapper glass-card">
+          <div class="road-nodes">
+            <div class="node node-haveri active">Haveri</div>
+            <div class="road-line"><div id="road-dot" class="road-dot"></div></div>
+            <div class="node node-shirali">Shirali</div>
+            <div class="road-line"><div class="road-dot-2"></div></div>
+            <div class="node node-haveri-2">Haveri</div>
+          </div>
+          <p class="road-caption">Then you had to go again. You got busy.</p>
+        </div>
+
+        <div class="shirali-reveal space-top">
+          <p class="s-text">But this time...</p>
+          <h1 class="s-highlight">we understood.</h1>
+          <p class="handwritten s-note">And that mattered to me more than anything.</p>
+        </div>
+
+        <!-- Scattered Memory Secret #6 -->
+        <div class="space-top">
+          <button class="secret-trigger-chip" data-secret="cloud">
+            ☁️ one more thing
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. COUNTDOWN TO TOMORROW -->
+    <section id="sec-tomorrow" class="sec-tomorrow section-theme-sunrise">
+      <div class="container center">
+        <span class="handwritten text-gold-bright">almost home</span>
+        <h1 class="tomorrow-title">TOMORROW</h1>
+        <p class="tomorrow-subtitle">I'll finally get my buffalo back.</p>
+
+        <div class="sunrise-visual">
+          <div class="sun-circle"></div>
+          <div class="sun-rays"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. FINAL EMOTIONAL SEQUENCE -->
+    <section id="sec-final-sequence" class="sec-final-sequence section-theme-dark-deep">
+      <div class="container center">
+        <div class="name-sequence">
+          <p class="n-line n1">Avnii...</p>
+          <p class="n-line n2">Hemuu...</p>
+          <p class="n-line n3">Sinchuu...</p>
+          <p class="n-line n4">Dumbo...</p>
+          <p class="n-line n5">Buffalo...</p>
+          <p class="n-line n6 handwritten text-gold">Come back already.</p>
+        </div>
+
+        <div id="final-climax-box" class="final-climax-box space-top-lg">
+          <h1 class="missed-hell-title">I MISSED YOU LIKE HELL.</h1>
+          <p class="happy-back-p">And I'm really, really happy you're coming back.</p>
+          <h1 class="welcome-back-giant">WELCOME BACK. 🫂</h1>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. FINAL CELEBRATION BUTTON -->
+    <section id="sec-celebration" class="sec-celebration section-theme-gold-bright">
+      <div class="container center">
+        <button id="btn-final-hug" class="btn-celebrate btn-pulse" aria-label="Trigger final celebration hug">
+          come here 🫂
+        </button>
+
+        <div id="celebration-result" class="celebration-result hidden">
+          <h1 class="finally-text">FINALLY.</h1>
+          <h2 class="person-back-text">MY PERSON IS BACK.</h2>
+        </div>
+
+        <!-- 15. FINAL SECRET ("psst...") -->
+        <div class="space-top-lg">
+          <button id="btn-psst-secret" class="btn-psst" aria-label="Read final secret note">
+            psst... 💛
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODALS FOR PHOTOS & SECRETS                -->
+  <!-- ========================================== -->
+
+  <!-- PHOTO LIGHTBOX MODAL -->
+  <div id="photo-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Photo Memory Viewer">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content polaroid-modal-card">
+      <button class="modal-close" aria-label="Close modal">&times;</button>
+      <div class="modal-img-container">
+        <img id="modal-img" src="" alt="Expanded Memory" loading="lazy" decoding="async">
+        <div id="modal-fallback" class="photo-fallback hidden">
+          <span class="fallback-icon">📷</span>
+          <span class="fallback-text">A memory goes here</span>
+        </div>
+      </div>
+      <p id="modal-caption" class="modal-caption handwritten"></p>
+      
+      <!-- Container for Special Photo Reveal text sequence -->
+      <div id="special-photo-sequence" class="special-photo-sequence hidden">
+        <p class="sp-line sp1">I wish I could go back to this moment.</p>
+        <p class="sp-line sp2">Not because it was perfect.</p>
+        <h2 class="sp-line sp3 highlight-gold">Because you were there.</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECRET POPUP MODAL -->
+  <div id="secret-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Secret Memory Popup">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content secret-modal-card glass-card">
+      <button class="modal-close" aria-label="Close modal">&times;</button>
+      <span class="handwritten text-accent">secret memory</span>
+      <h3 id="secret-title" class="secret-title"></h3>
+      <p id="secret-body" class="secret-body handwritten"></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
